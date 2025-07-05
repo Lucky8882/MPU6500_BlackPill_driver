@@ -29,7 +29,7 @@ This project is great for learning how to connect sensors to microcontrollers, h
 
 ## Block Diagram
 
-![MPU6500 + STM32 Black Pill Block Diagram](images/stm_block.png)
+![MPU6500 + STM32 Black Pill Block Diagram](./images/stm_block.png)
 
 ## Devices Specifications
 
