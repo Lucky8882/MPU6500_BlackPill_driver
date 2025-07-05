@@ -1,11 +1,17 @@
 # STM32 Black Pill MPU6500 Driver Project
 
-![Block Diagram](docs/block_diagram.png)
-
 ## Overview
 
-This project provides a **clean, layered, production-quality C driver** for the MPU6500 6-axis IMU sensor, running on an STM32 Black Pill (STM32F4 series) board.  
-It demonstrates robust I2C communication, register-level access, and high-level sensor data acquisition, with all data output over UART for easy debugging and integration.
+This project helps you connect and use an **MPU6500 motion sensor** with an **STM32 Black Pill** development board. The MPU6500 is a small chip that can measure movement (acceleration) and rotation (gyroscope) in three directions. The STM32 Black Pill is a popular, affordable microcontroller board.
+
+The code in this project is organized in a clear way to make it easy to understand and use, even if you are new to embedded programming. It does the following:
+
+- **Talks to the sensor using I2C:** I2C is a common way for chips to communicate with each other using just two wires.
+- **Reads data from the sensor:** The code can get acceleration and rotation values from the MPU6500.
+- **Sends the data over UART:** The STM32 board sends the sensor data using UART (a serial communication method). If you have a UART-to-USB bridge (like an FTDI or CP2102 module), you can connect it to your computer and use any serial terminal program (like PuTTY, Tera Term, or Arduino Serial Monitor) to see the data.
+- **Easy to expand:** You can add more features later, like reading temperature or using more advanced sensor functions.
+
+This project is great for learning how to connect sensors to microcontrollers, how to organize your code, and how to see real sensor data using a serial terminal on your computer. You don’t need to use any special libraries for the sensor—everything is written from scratch and explained step by step.
 
 ---
 
@@ -23,37 +29,72 @@ It demonstrates robust I2C communication, register-level access, and high-level 
 
 ## Block Diagram
 
-![MPU6500 + STM32 Black Pill Block Diagram](docs/block_diagram.png)
+![MPU6500 + STM32 Black Pill Block Diagram](images/stm_block.png)
 
-*Replace the above image with your own block diagram or hardware photo for clarity.*
+## Devices Specifications
 
----
+### STM32 Black Pill Board
+
+- **Model:** STM32F401CEU6 (commonly called "Black Pill")
+- **Description:**  
+  The STM32 Black Pill is a small, affordable development board based on the STM32F4 series microcontroller. It features a 32-bit ARM Cortex-M4 processor running at up to 84 MHz, with 256 KB Flash and 64 KB RAM. The board is popular for hobby and learning projects because it is easy to use, has many input/output pins, and supports programming and debugging through a standard micro-USB or ST-Link interface.
+
+- **Key Features:**
+  - ARM Cortex-M4 core
+  - 256 KB Flash, 64 KB RAM
+  - Lots of GPIO pins
+  - Supports I2C, UART, SPI, PWM, ADC, and more
+  - Can be programmed using STM32CubeIDE or other tools
+
+
+## Sensor Specifications
+
+### MPU6500 6-Axis Motion Sensor
+
+- **Description:**  
+  The MPU6500 is a tiny sensor chip that combines a 3-axis accelerometer (measures movement) and a 3-axis gyroscope (measures rotation) in one package. It is commonly used in drones, robots, and smartphones to detect motion and orientation.
+
+- **Key Features:**
+  - 3-axis accelerometer (measures X, Y, Z movement)
+  - 3-axis gyroscope (measures X, Y, Z rotation)
+  - Communicates using I2C (used in this project) or SPI
+  - Operates at 3.3V
+  - Small and easy to connect to microcontroller boards
+
+- **Typical Applications:**
+  - Drones and quadcopters
+  - Robotics
+  - Game controllers
+  - Smartphones and wearable devices
+  
+
+
 
 ## Hardware Setup
 
-- **MCU:** STM32F4 Black Pill (e.g., STM32F401CCU6)
+- **MCU:** STM32F4 Black Pill (e.g., STM32F401CEU6)
 - **Sensor:** MPU6500 (3.3V logic)
-- **Connections:**
-    - `SCL` → STM32 I2C SCL pin (e.g., PB6)
-    - `SDA` → STM32 I2C SDA pin (e.g., PB7)
-    - `VCC` → 3.3V
-    - `GND` → GND
-    - `UART TX` (STM32, e.g., PA2) → USB-UART adapter RX (for serial output)
-    - `UART RX` (STM32, e.g., PA3) → USB-UART adapter TX (optional)
+- **Programmer/Debugger:** ST-Link V2 (or similar)
+- **USB-UART Adapter:** For viewing data on your computer
+
+### Connections
+
+- **MPU6500 SCL** → STM32 PB6 (I2C SCL)
+- **MPU6500 SDA** → STM32 PB7 (I2C SDA)
+- **MPU6500 VCC** → 3.3V
+- **MPU6500 GND** → GND
+
+- **STM32 PA2 (TX)** → USB-UART Adapter RX (for serial output)
+- **STM32 PA3 (RX)** → USB-UART Adapter TX (optional)
+- **STM32 GND** → USB-UART Adapter GND
+
+- **ST-Link** connects to the STM32 Black Pill for programming and debugging (SWDIO, SWCLK, 3.3V, GND).
+
+> Use the ST-Link to program the board, and a USB-UART adapter to see sensor data on your computer using any serial terminal (115200 baud).
 
 ---
 
-## Project Structure
-Core/
-├── Inc/
-│ ├── mpu6500.h
-│ ├── mpu6500_ll.h
-│ └── mpu6500_reg.h
-├── Src/
-│ ├── mpu6500.c
-│ ├── mpu6500_ll.c
-│ └── main.c
-
+## Project files
 
 - **mpu6500_reg.h:** Register addresses and bitfields for MPU6500.
 - **mpu6500_ll.h/c:** Low-level I2C register access using STM32 HAL.
@@ -66,7 +107,7 @@ Core/
 
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/yourusername/yourrepo.git
+    git clone https://github.com/Lucky8882/MPU6500_BlackPill_driver
     ```
 
 2. **Open in STM32CubeIDE.**
@@ -89,7 +130,7 @@ Core/
 
 MPU6500 Example Start
 WHO_AM_I: 0x70
-MPU6500 detected!
+MPU6500 detected! <br>
 ACCEL: X=123 Y=-456 Z=789 | GYRO: X=12 Y=34 Z=-56
 ACCEL: X=124 Y=-455 Z=790 | GYRO: X=13 Y=33 Z=-55
 ...
